@@ -38,9 +38,19 @@ class StateManager(QObject):
             print(f"[StateManager] State changed: {old_state.name} -> {new_state.name}")
             self.state_changed.emit(new_state)
 
-    def start_op(self, op_number: str):
+    def start_op(self, op_number: str, is_contingency: bool = False):
         """Inicia uma Ordem de Produção."""
         if self._current_state == LineState.FREE:
+            # Se for contingência, garante que a OP existe no banco local
+            if is_contingency:
+                from database.db_manager import db
+                db.execute_query(
+                    "INSERT OR IGNORE INTO production_orders (op_number, is_contingency) VALUES (?, ?)",
+                    (op_number, True),
+                    commit=True
+                )
+                print(f"[StateManager] OP {op_number} opened in CONTINGENCY mode.")
+
             self._active_op = op_number
             self._start_time = datetime.datetime.now()
             self.set_state(LineState.PRODUCTION)

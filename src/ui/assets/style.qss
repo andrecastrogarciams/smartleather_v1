@@ -1,0 +1,84 @@
+/* 
+ * Design System: Industrial Intelligence (Organic Brutalism)
+ * Refined for UX: Sovereign Operator
+ */
+
+/* --- App Background --- */
+QMainWindow {
+    background-color: #f4faff;
+    color: #111d23;
+}
+
+/* --- Base Text --- */
+QLabel {
+    color: #111d23;
+    font-family: "Inter", sans-serif;
+}
+
+/* --- Primary Button (Refined) --- */
+QPushButton#PrimaryButton {
+    background-color: #002a4d;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    padding: 16px 24px;
+    font-size: 14px;
+    font-weight: 900; /* Black weight for authority */
+    font-family: "Inter", sans-serif;
+    letter-spacing: 2px; /* Editorial feel */
+    text-transform: uppercase;
+}
+
+QPushButton#PrimaryButton:hover {
+    background-color: #1b4066;
+}
+
+QPushButton#PrimaryButton:pressed {
+    background-color: #001c37;
+    border: 3px solid #8aacd8; /* Tactile feel from design spec */
+}
+
+/* --- Input Fields (Refined) --- */
+QLineEdit#IndustrialInput {
+    background-color: #e3f0f8; /* surface_container */
+    border: none;
+    border-bottom: 2px solid transparent;
+    border-radius: 6px 6px 0 0; /* Only top rounded */
+    padding: 16px;
+    font-size: 18px;
+    font-weight: 600;
+    color: #002a4d;
+    font-family: "Inter", sans-serif;
+}
+
+QLineEdit#IndustrialInput:focus {
+    border-bottom: 3px solid #002a4d; /* Animated focal point */
+    background-color: #ffffff;
+}
+
+/* --- Production Cards --- */
+QWidget#ProductionCard {
+    background-color: #ffffff;
+    border-radius: 12px;
+}
+
+/* --- Labels & Titles (The Editorial Layer) --- */
+QLabel#DisplayLarge {
+    font-size: 32px;
+    font-weight: 900;
+    color: #002a4d;
+    letter-spacing: -2px;
+}
+
+QLabel#IndustrialLabel {
+    font-size: 10px;
+    font-weight: 900;
+    color: #43474e;
+    letter-spacing: 2px;
+}
+
+/* --- Error State (Intervention State) --- */
+QWidget#ErrorCard {
+    background-color: #ffdad6;
+    border: 2px solid #ba1a1a;
+}
