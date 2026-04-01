@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+
+<html class="light" lang="pt-BR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>SmartLeather v1 - Production Dashboard</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            colors: {
+              "on-secondary-container": "#526772",
+              "surface-dim": "#cfdce4",
+              "outline-variant": "#c3c6cf",
+              "primary": "#002a4d",
+              "on-primary-fixed-variant": "#25486f",
+              "inverse-on-surface": "#e6f3fb",
+              "surface-container-high": "#ddeaf2",
+              "on-secondary": "#ffffff",
+              "background": "#f4faff",
+              "primary-container": "#1b4066",
+              "tertiary-fixed": "#83fc8e",
+              "surface-container": "#e3f0f8",
+              "on-primary": "#ffffff",
+              "surface-tint": "#3e6088",
+              "on-error-container": "#93000a",
+              "error": "#ba1a1a",
+              "on-tertiary": "#ffffff",
+              "on-background": "#111d23",
+              "on-tertiary-fixed": "#002106",
+              "on-secondary-fixed": "#071e27",
+              "secondary-container": "#cfe6f2",
+              "tertiary": "#00300b",
+              "surface-variant": "#d7e4ec",
+              "on-primary-fixed": "#001c37",
+              "on-surface-variant": "#43474e",
+              "inverse-primary": "#a7c9f6",
+              "tertiary-fixed-dim": "#66df75",
+              "secondary": "#4c616c",
+              "surface-bright": "#f4faff",
+              "on-secondary-fixed-variant": "#354a53",
+              "surface-container-low": "#e9f6fd",
+              "on-tertiary-fixed-variant": "#00531a",
+              "on-error": "#ffffff",
+              "primary-fixed": "#d2e4ff",
+              "surface-container-lowest": "#ffffff",
+              "secondary-fixed": "#cfe6f2",
+              "secondary-fixed-dim": "#b4cad6",
+              "surface-container-highest": "#d7e4ec",
+              "outline": "#73777f",
+              "error-container": "#ffdad6",
+              "on-surface": "#111d23",
+              "on-tertiary-container": "#46c05a",
+              "inverse-surface": "#263238",
+              "tertiary-container": "#004916",
+              "primary-fixed-dim": "#a7c9f6",
+              "on-primary-container": "#8aacd8",
+              "surface": "#f4faff"
+            },
+            fontFamily: {
+              "headline": ["Inter"],
+              "body": ["Inter"],
+              "label": ["Inter"]
+            },
+            borderRadius: {"DEFAULT": "0.125rem", "lg": "0.25rem", "xl": "0.5rem", "full": "0.75rem"},
+          },
+        },
+      }
+    </script>
+<style>
+      .material-symbols-outlined {
+        font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+      }
+      body { font-family: 'Inter', sans-serif; }
+    </style>
+</head>
+<body class="bg-background text-on-background min-h-screen overflow-hidden">
+<!-- TopAppBar Shell -->
+<header class="bg-[#002a4d] dark:bg-[#001a33] text-sky-50 dark:text-sky-100 docked full-width top-0 z-50 bg-gradient-to-r from-[#002a4d] to-[#1b4066] shadow-2xl shadow-blue-900/20 flex justify-between items-center w-full px-8 py-4 fixed">
+<div class="flex items-center gap-8">
+<span class="text-2xl font-black tracking-tighter text-white uppercase">SmartLeather</span>
+<nav class="hidden md:flex gap-6 font-['Inter'] font-bold tracking-tight text-lg">
+<span class="text-sky-300/70">Sector: <span class="text-white">Cortume</span></span>
+<span class="text-white border-b-2 border-sky-400 pb-1">Production Line: L01</span>
+</nav>
+</div>
+<div class="flex items-center gap-6">
+<div class="flex flex-col items-end">
+<span class="font-mono font-bold text-xl tracking-widest text-white">14:30:22</span>
+<div class="flex gap-3 items-center">
+<div class="flex items-center gap-1 text-xs font-bold uppercase tracking-tighter">
+<span class="material-symbols-outlined text-[14px] text-tertiary-fixed-dim" style="font-variation-settings: 'FILL' 1;">sensors</span>
+<span>Network: Online</span>
+</div>
+<div class="flex items-center gap-1 text-xs font-bold uppercase tracking-tighter">
+<span class="material-symbols-outlined text-[14px] text-tertiary-fixed-dim" style="font-variation-settings: 'FILL' 1;">sync</span>
+<span>Sync: OK</span>
+</div>
+</div>
+</div>
+</div>
+</header>
+<!-- SideNavBar Shell (Operational Control) -->
+<aside class="fixed left-0 top-0 h-full pt-20 flex flex-col z-40 bg-[#e3f0f8] dark:bg-[#0a1929] text-[#002a4d] dark:text-sky-400 font-['Inter'] font-semibold uppercase tracking-widest text-xs docked left-0 h-full w-24 md:w-72 no-border">
+<div class="p-6 pb-2">
+<h2 class="text-[#002a4d]/60 text-[10px] mb-4">OPERATIONAL CONTROL</h2>
+</div>
+<div class="flex flex-col gap-2 px-2">
+<!-- Active State Navigation Logic -->
+<button class="bg-[#002a4d] text-white rounded-lg p-5 flex items-center gap-4 shadow-lg active:ring-4 ring-sky-500/30 transition-all">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">play_circle</span>
+<span class="hidden md:block">Start OP</span>
+</button>
+<button class="text-[#002a4d]/60 hover:bg-[#002a4d]/5 p-5 flex items-center gap-4 rounded-lg transition-all hover:translate-x-1 duration-300">
+<span class="material-symbols-outlined">stop_circle</span>
+<span class="hidden md:block">Stop Line</span>
+</button>
+<button class="text-[#002a4d]/60 hover:bg-[#002a4d]/5 p-5 flex items-center gap-4 rounded-lg transition-all hover:translate-x-1 duration-300">
+<span class="material-symbols-outlined">check_circle</span>
+<span class="hidden md:block">Finish OP</span>
+</button>
+</div>
+<div class="mt-auto p-4 flex flex-col gap-3">
+<button class="w-full bg-amber-500 hover:bg-amber-600 text-on-surface font-black p-6 rounded-xl shadow-xl active:scale-95 transition-all flex flex-col items-center justify-center text-center gap-2">
+<span class="material-symbols-outlined text-3xl">pause_circle</span>
+<span class="text-sm">PARADA MANUAL</span>
+</button>
+<button class="w-full bg-error hover:bg-red-700 text-white font-black p-6 rounded-xl shadow-xl active:scale-95 transition-all flex flex-col items-center justify-center text-center gap-2">
+<span class="material-symbols-outlined text-3xl">cancel</span>
+<span class="text-sm">FINALIZAR OP</span>
+</button>
+</div>
+</aside>
+<!-- Main Content Canvas -->
+<main class="pl-24 md:pl-72 pt-20 pb-16 min-h-screen bg-surface">
+<div class="p-8 max-w-7xl mx-auto space-y-8">
+<!-- Production Status Banner -->
+<div class="bg-tertiary-container/10 border-l-8 border-tertiary-container p-6 rounded-r-2xl flex items-center justify-between shadow-sm">
+<div class="flex items-center gap-4">
+<div class="w-4 h-4 rounded-full bg-tertiary-fixed-dim animate-pulse"></div>
+<span class="font-black text-2xl tracking-tighter text-tertiary-container uppercase">EM PRODUÇÃO</span>
+</div>
+<div class="text-on-secondary-container font-mono font-bold text-lg">
+                    EFFICIENCY: 94.2%
+                </div>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+<!-- Central Production Counter -->
+<div class="lg:col-span-8 space-y-8">
+<div class="bg-surface-container-lowest p-10 rounded-3xl shadow-2xl shadow-blue-900/5 relative overflow-hidden">
+<div class="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full -mr-32 -mt-32"></div>
+<div class="relative z-10 flex flex-col md:flex-row justify-between items-end md:items-center mb-12">
+<div>
+<p class="label-md uppercase tracking-[0.2em] text-on-surface-variant font-bold mb-2">Total Produzido</p>
+<h1 class="text-8xl font-black text-primary tracking-tighter">1.250</h1>
+</div>
+<div class="text-right mt-6 md:mt-0">
+<p class="label-md uppercase tracking-[0.2em] text-on-surface-variant font-bold mb-2">Meta Prevista</p>
+<h2 class="text-4xl font-bold text-on-secondary-container tracking-tight">3.000</h2>
+</div>
+</div>
+<!-- Heavy Progress Bar -->
+<div class="space-y-4">
+<div class="flex justify-between text-sm font-bold text-primary/60 uppercase tracking-widest">
+<span>Progresso Atual</span>
+<span>41.6%</span>
+</div>
+<div class="h-10 w-full bg-surface-container-high rounded-full overflow-hidden p-1 shadow-inner">
+<div class="h-full bg-gradient-to-r from-primary to-primary-container rounded-full shadow-lg transition-all duration-1000" style="width: 41.6%"></div>
+</div>
+</div>
+</div>
+<!-- Detail Cards (Bento Style) -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+<div class="bg-white p-8 rounded-3xl shadow-xl shadow-blue-900/5 flex flex-col justify-between min-h-[200px]">
+<span class="material-symbols-outlined text-primary text-4xl" style="font-variation-settings: 'FILL' 1;">precision_manufacturing</span>
+<div>
+<h3 class="text-on-surface-variant font-bold text-xs uppercase tracking-widest mb-1">Ordem de Produção</h3>
+<p class="text-3xl font-black text-primary">#2024-001</p>
+</div>
+</div>
+<div class="bg-white p-8 rounded-3xl shadow-xl shadow-blue-900/5 flex flex-col justify-between min-h-[200px]">
+<span class="material-symbols-outlined text-primary text-4xl" style="font-variation-settings: 'FILL' 1;">architecture</span>
+<div>
+<h3 class="text-on-surface-variant font-bold text-xs uppercase tracking-widest mb-1">Tempo de Ciclo</h3>
+<p class="text-3xl font-black text-primary">02:45 <span class="text-sm font-medium text-on-surface-variant uppercase">seg</span></p>
+</div>
+</div>
+</div>
+</div>
+<!-- OP Details Sidebar (In-Main) -->
+<div class="lg:col-span-4 space-y-8">
+<div class="bg-primary-container text-white p-8 rounded-3xl shadow-2xl relative overflow-hidden group">
+<img alt="Leather Texture" class="absolute inset-0 w-full h-full object-cover opacity-20 group-hover:scale-110 transition-transform duration-700" data-alt="Close-up texture of premium dark navy blue leather with fine grain and subtle highlights in a luxury industrial setting" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDr-6XpC5ac0bVOnzYi_YEXxskuGl8Ey8aywhWyKV5DDNxhHLrAXnvOe5IJpoAE59SjyPE3s3gWXtEGiDjN9Ip6rODzuAChr40KKRDYSRIaWUmDI2WpIegzMwhTemtdXuR6UIJn03k-TVSU9U_gnOLgT2Gk-h3xXSbbHT37ddsYwFgkcOF90ks_yIPZt6xrYnaSdglAv4kKcvt_fjlNGk8bSx3WjHSIZpip13iaOKUmqN-F7nMkhnjR6kBV6X9O0GzYbQI49WKP5k0"/>
+<div class="relative z-10">
+<h3 class="text-sky-300 font-bold text-xs uppercase tracking-[0.2em] mb-8">Informações do Produto</h3>
+<div class="space-y-8">
+<div>
+<label class="block text-[10px] text-sky-400 font-black uppercase mb-1">Produto</label>
+<p class="text-2xl font-extrabold tracking-tight">Couro Automotivo A</p>
+</div>
+<div>
+<label class="block text-[10px] text-sky-400 font-black uppercase mb-1">Derivação</label>
+<p class="text-2xl font-extrabold tracking-tight">Azul Marinho</p>
+</div>
+<div class="pt-8 mt-8 border-t border-white/10">
+<div class="flex justify-between items-center mb-4">
+<span class="text-xs font-bold uppercase text-sky-400">Qualidade</span>
+<span class="text-xs font-black bg-tertiary-fixed text-on-tertiary-fixed px-2 py-0.5 rounded">GRADE A</span>
+</div>
+<p class="text-sm text-sky-100/70 leading-relaxed">Padrão de exportação premium. Inspeção eletrônica ativa.</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Machine Stats Widget -->
+<div class="bg-surface-container p-8 rounded-3xl border border-white/50">
+<h4 class="text-[#002a4d] font-bold text-xs uppercase tracking-widest mb-6">Métricas da Linha</h4>
+<div class="space-y-6">
+<div class="flex justify-between items-center">
+<span class="text-on-surface-variant font-medium">Temperatura</span>
+<span class="font-bold text-primary">24.5°C</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-on-surface-variant font-medium">Pressão</span>
+<span class="font-bold text-primary">120 bar</span>
+</div>
+<div class="flex justify-between items-center">
+<span class="text-on-surface-variant font-medium">Velocidade</span>
+<span class="font-bold text-primary">1.2 m/s</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Footer Shell -->
+<footer class="bg-white/85 dark:bg-[#111d23]/85 backdrop-blur-xl text-[#111d23] dark:text-white font-['Inter'] font-medium text-sm docked full-width bottom-0 z-50 border-t border-sky-100 dark:border-sky-900/30 shadow-[0_-10px_40px_rgba(0,0,0,0.05)] fixed bottom-0 left-0 w-full flex justify-between items-center px-8 py-3">
+<div class="flex items-center gap-6">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-full bg-primary-container flex items-center justify-center text-white text-[10px] font-black">JS</div>
+<div class="flex flex-col">
+<span class="font-bold leading-none">Operador: João Silva</span>
+<span class="text-[10px] text-slate-500 uppercase font-black">Perfil: Operador</span>
+</div>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<span class="text-slate-400 hidden md:inline">SmartLeather v1 Operational System</span>
+<div class="h-4 w-px bg-slate-200 mx-2 hidden md:block"></div>
+<nav class="flex gap-4">
+<a class="text-slate-500 hover:text-[#002a4d] hover:bg-sky-50 px-3 py-1 rounded transition-colors" href="#">Profile</a>
+<a class="font-bold text-error hover:bg-red-50 px-3 py-1 rounded transition-colors" href="#">Logout</a>
+</nav>
+</div>
+</footer>
+</body></html>

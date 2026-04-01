@@ -1,0 +1,6 @@
+PySide6
+requests
+python-dotenv
+# RPi.GPIO ou gpiozero (para uso no Raspberry Pi)
+# Mocking GPIO para desenvolvimento em Windows
+RPi.GPIO; sys_platform != 'win32'
