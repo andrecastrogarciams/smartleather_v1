@@ -1,20 +1,26 @@
 import uuid
 import datetime
 import threading
+from PySide6.QtCore import QObject, Signal
 from core.state_manager import state_manager, LineState
 from hardware.gpio_manager import gpio_manager
 from database.db_manager import db
 from utils.config import config
 from core.downtime_manager import downtime_manager
 
-class ProductionManager:
+class ProductionManager(QObject):
     """
     Gerencia o fluxo de produção: captura pulsos da GPIO e salva no Banco de Dados.
+    Refinado para suportar Buffer de Parada Manual.
     """
+    pulse_recorded = Signal(int) # Emitido para atualizar UI: contador total
+    buffer_updated = Signal(int) # Emitido para atualizar UI: contador de buffer
+
     def __init__(self):
+        super().__init__()
         self._setup_listeners()
-        self._current_user_id = 1 # TODO: Integrar com Sessão/Login
-        self._current_shift_id = None # TODO: Integrar com Gerenciador de Turnos
+        self._current_user_id = 1 
+        self._current_shift_id = None 
 
     def _setup_listeners(self):
         """Registra o callback no gerenciador de GPIO."""
@@ -69,24 +75,36 @@ class ProductionManager:
 
         try:
             db.execute_query(query, params, commit=True)
-            print(f"[ProductionManager] [SUCCESS] Event recorded: {event_uuid} | OP: {state_manager.active_op} | TS: {timestamp}")
+            # Busca contagem total da OP para emitir sinal
+            count_data = db.fetch_one(
+                "SELECT COUNT(*) as total FROM production_events WHERE op_id = ?",
+                (op_info['id'],)
+            )
+            self.pulse_recorded.emit(count_data['total'])
+            print(f"[ProductionManager] [SUCCESS] Event recorded: {event_uuid} | Total: {count_data['total']}")
         except Exception as e:
             print(f"[ProductionManager] [DATABASE ERROR] Failed to record event {event_uuid}: {e}")
 
     def _add_to_buffer(self):
-        """Adiciona um pulso ao buffer de parada manual."""
+        """Adiciona um pulso ao buffer de parada manual e notifica a UI."""
         buffer_uuid = str(uuid.uuid4())
         timestamp = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
         downtime_uuid = downtime_manager.current_downtime_uuid
         
         if not downtime_uuid:
-            print("[ProductionManager] [BUFFER ERROR] No active downtime UUID to link buffer pulse.")
             return
 
         query = "INSERT INTO downtime_buffer (uuid, downtime_event_uuid, timestamp) VALUES (?, ?, ?)"
         try:
             db.execute_query(query, (buffer_uuid, downtime_uuid, timestamp), commit=True)
-            print(f"[ProductionManager] [BUFFER] Pulse added: {buffer_uuid} | Downtime: {downtime_uuid} | TS: {timestamp}")
+            
+            # Conta itens no buffer atual para notificar UI
+            buffer_data = db.fetch_one(
+                "SELECT COUNT(*) as total FROM downtime_buffer WHERE downtime_event_uuid = ? AND processed = 0",
+                (downtime_uuid,)
+            )
+            self.buffer_updated.emit(buffer_data['total'])
+            print(f"[ProductionManager] [BUFFER] Pulse added. Total in Buffer: {buffer_data['total']}")
         except Exception as e:
             print(f"[ProductionManager] [BUFFER ERROR] Failed to add pulse to buffer: {e}")
 
@@ -95,7 +113,6 @@ class ProductionManager:
         Processa o buffer de uma parada: contabiliza como produção ou apenas limpa.
         """
         if contabilizar:
-            # Busca itens no buffer
             buffer_items = db.fetch_all(
                 "SELECT timestamp FROM downtime_buffer WHERE downtime_event_uuid = ? AND processed = 0",
                 (downtime_uuid,)
@@ -104,8 +121,13 @@ class ProductionManager:
             for item in buffer_items:
                 self._record_production_event(timestamp=item['timestamp'])
 
-        # Marca como processado ou remove (simplificado: removemos no MVP)
-        db.execute_query("DELETE FROM downtime_buffer WHERE downtime_event_uuid = ?", (downtime_uuid,), commit=True)
+        # Remove do buffer após processar (para simplificar auditoria local no MVP)
+        db.execute_query(
+            "DELETE FROM downtime_buffer WHERE downtime_event_uuid = ?", 
+            (downtime_uuid,), 
+            commit=True
+        )
+        self.buffer_updated.emit(0) # Reseta contador visual do buffer
         print(f"[ProductionManager] Buffer cleared for downtime {downtime_uuid}")
 
 # Instância global

@@ -18,9 +18,15 @@ class Config:
         self.API_URL = os.getenv("API_URL", "http://localhost:8000/api")
         self.API_KEY = os.getenv("API_KEY", "SL-V1-SECRET-KEY")
 
-        # Banco de Dados
+        # Banco de Dados Local
         self.DB_NAME = os.getenv("DB_NAME", "smartleather.db")
-        self.MYSQL_CENTRAL_URL = os.getenv("MYSQL_CENTRAL_URL", "")
+        
+        # Banco de Dados Central (MySQL)
+        self.MYSQL_HOST = os.getenv("MYSQL_HOST", "192.168.10.15")
+        self.MYSQL_PORT = int(os.getenv("MYSQL_PORT", 3306))
+        self.MYSQL_USER = os.getenv("MYSQL_USER", "smartleather")
+        self.MYSQL_PASS = os.getenv("MYSQL_PASS", "sl_pass_2026")
+        self.MYSQL_DB = os.getenv("MYSQL_DB", "smartleather_central")
 
     def __repr__(self):
         return (f"<Config DEVICE_ID={self.DEVICE_ID} SECTOR={self.SECTOR_ID} "
