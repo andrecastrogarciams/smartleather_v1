@@ -1,5 +1,5 @@
 from PySide6.QtWidgets import (QWidget, QVBoxLayout, QHBoxLayout, 
-                                 QLabel, QSpacerItem, QSizePolicy, QFrame, QStackedWidget)
+                                 QLabel, QSpacerItem, QSizePolicy, QFrame, QStackedWidget, QPushButton)
 from PySide6.QtCore import Qt, Signal
 from ui.widgets.buttons import PrimaryButton
 from ui.widgets.inputs import IndustrialInput
