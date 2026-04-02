@@ -7,6 +7,7 @@ from dotenv import load_dotenv
 sys.path.append(os.path.dirname(os.path.abspath(__file__)))
 
 from ui.views.login_view import LoginView
+from ui.views.op_start_view import OPStartView
 
 # Carrega variáveis de ambiente
 load_dotenv()
@@ -30,12 +31,23 @@ class MainWindow(QMainWindow):
         self.login_view.login_successful.connect(self._on_login_success)
         self.stacked_widget.addWidget(self.login_view)
 
+        # View de Início de OP (UI-3)
+        self.op_start_view = OPStartView()
+        self.op_start_view.op_started.connect(self._on_op_started)
+        self.stacked_widget.addWidget(self.op_start_view)
+
         # Exibe a tela de login inicialmente
         self.stacked_widget.setCurrentWidget(self.login_view)
 
     def _on_login_success(self, user_id):
-        print(f"[MainApp] User {user_id} logged in. Routing to next screen...")
-        # TODO: Implementar e rotear para Start OP Screen ou Dashboard
+        print(f"[MainApp] User {user_id} logged in. Routing to OP Start...")
+        # Simula obtenção do nome do usuário (virá do DB futuramente)
+        self.op_start_view.set_user("Operador Padrão")
+        self.stacked_widget.setCurrentWidget(self.op_start_view)
+
+    def _on_op_started(self, op_data):
+        print(f"[MainApp] OP {op_data['numero']} started. Routing to Dashboard...")
+        # TODO: Implementar e rotear para Dashboard (UI-4)
         pass
 
 def load_theme(app: QApplication):
