@@ -2,5 +2,8 @@ PySide6
 requests
 python-dotenv
 mysql-connector-python
+
 # RPi.GPIO (Compatibilidade RPI 5 via rpi-lgpio)
-rpi-lgpio; sys_platform != 'win32'
+# Versões fixadas baseadas na compilação bem-sucedida e restritas ao Linux
+lgpio==0.2.2.0; sys_platform == 'linux'
+rpi-lgpio==0.6; sys_platform == 'linux'
